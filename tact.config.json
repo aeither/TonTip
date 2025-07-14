@@ -10,6 +10,16 @@
         "external": false
       },
       "mode": "full"
+    },
+    {
+      "name": "TipBot",
+      "path": "contracts/tip_bot.tact",
+      "output": "build/TipBot",
+      "options": {
+        "debug": false,
+        "external": false
+      },
+      "mode": "full"
     }
   ]
 }

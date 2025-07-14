@@ -1,13 +1,9 @@
-import './App.scss'
-import {THEME, TonConnectUIProvider} from "@tonconnect/ui-react";
-import {Header} from "./components/Header/Header";
-import {TxForm} from "./components/TxForm/TxForm";
-import {Footer} from "./components/Footer/Footer";
-import {TonProofDemo} from "./components/TonProofDemo/TonProofDemo";
-import {CreateJettonDemo} from "./components/CreateJettonDemo/CreateJettonDemo";
-import {WalletBatchLimitsTester} from "./components/WalletBatchLimitsTester/WalletBatchLimitsTester";
-import {SignDataTester} from "./components/SignDataTester/SignDataTester";
-import { MerkleExample } from "./components/MerkleExample/MerkleExample";
+import { THEME, TonConnectUIProvider } from "@tonconnect/ui-react";
+import { Link, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import './App.scss';
+import { MainPage } from "./components/MainPage/MainPage";
+import { OldPage } from "./components/OldPage/OldPage";
+import { TipBotInteraction } from "./components/TipBotInteraction/TipBotInteraction";
 
 function App() {
   return (
@@ -366,16 +362,21 @@ function App() {
               twaReturnUrl: 'https://t.me/DemoDappWithTonConnectBot/demo'
           }}
       >
-        <div className="app">
-            <Header />
-            <TxForm />
-            <WalletBatchLimitsTester />
-            <SignDataTester />
-            <CreateJettonDemo />
-            <TonProofDemo />
-            <MerkleExample />
-            <Footer />
-        </div>
+        <Router>
+          <div className="app">
+            <nav className="app-nav">
+              <Link to="/" className="nav-link">TonTip</Link>
+              <Link to="/main" className="nav-link">Main</Link>
+              <Link to="/old" className="nav-link">Old Demo</Link>
+            </nav>
+            
+            <Routes>
+              <Route path="/" element={<TipBotInteraction />} />
+              <Route path="/main" element={<MainPage />} />
+              <Route path="/old" element={<OldPage />} />
+            </Routes>
+          </div>
+        </Router>
       </TonConnectUIProvider>
   )
 }

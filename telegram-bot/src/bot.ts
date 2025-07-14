@@ -13,7 +13,7 @@ export function createBot(token: string) {
 
   // Handle start command
   bot.command("start", async (ctx) => {
-    const welcomeMessage = `Welcome to UniFolio Bot! 🚀\n\nUse /menu to open the mini app and start managing your portfolio.`;
+    const welcomeMessage = `Welcome to TonTip Bot! 🚀\n\nUse /menu to open the mini app and start managing your portfolio.`;
     
     const keyboard = new InlineKeyboard()
       .webApp("Open Mini App", CURRENT_MINI_APP_URL);
@@ -25,7 +25,7 @@ export function createBot(token: string) {
   
   // Handle menu command
   bot.command("menu", async (ctx) => {
-    const menuMessage = `📱 UniFolio Mini App\n\nClick the button below to open the mini app and manage your portfolio:`;
+    const menuMessage = `📱 TonTip Mini App\n\nClick the button below to open the mini app and manage your portfolio:`;
     
     const keyboard = new InlineKeyboard()
       .webApp("Open Mini App", CURRENT_MINI_APP_URL);
@@ -37,7 +37,7 @@ export function createBot(token: string) {
 
   // Handle help command
   bot.command("help", async (ctx) => {
-    const helpMessage = `🤖 UniFolio Bot Commands:\n\n` +
+    const helpMessage = `🤖 TonTip Bot Commands:\n\n` +
       `/start - Welcome message and open mini app\n` +
       `/menu - Open the mini app\n` +
       `/help - Show this help message\n\n` +
@@ -53,7 +53,7 @@ export function createBot(token: string) {
 
   // Handle non-command messages
   bot.on("message", async (ctx) => {
-    const message = `Hi! Use /menu to open the UniFolio mini app and start managing your portfolio.`;
+    const message = `Hi! Use /menu to open the TonTip mini app and start managing your portfolio.`;
     
     const keyboard = new InlineKeyboard()
       .webApp("Open Mini App", CURRENT_MINI_APP_URL);

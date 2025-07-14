@@ -1,4 +1,37 @@
 .app {
+  .app-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 1rem 2rem;
+    z-index: 1000;
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    
+    .nav-link {
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background: rgba(0, 136, 204, 0.1);
+        color: #0088cc;
+      }
+      
+      &.active {
+        background: #0088cc;
+        color: white;
+      }
+    }
+  }
   min-height: 100%;
   display: flex;
   flex-direction: column;
