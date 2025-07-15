@@ -1,6 +1,6 @@
+import type { NetworkProvider } from '@ton/blueprint';
 import { toNano } from '@ton/core';
 import { TipBot } from '../build/TipBot/TipBot_TipBot';
-import { NetworkProvider } from '@ton/blueprint';
 
 export async function run(provider: NetworkProvider) {
     const tipBot = provider.open(await TipBot.fromInit(provider.sender().address!));
@@ -19,6 +19,6 @@ export async function run(provider: NetworkProvider) {
     await provider.waitForDeploy(tipBot.address);
 
     console.log('TipBot deployed at:', tipBot.address.toString());
-    console.log('Owner:', provider.sender().address!.toString());
-    console.log('Total tips:', await tipBot.getTotalTips());
+    console.log('Owner:', provider.sender().address?.toString());
+    console.log('Total tips:', await tipBot.getGetTotalTips());
 }

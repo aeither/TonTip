@@ -10,6 +10,10 @@ export function useTipBotContract() {
     recipientAddress: string, 
     senderAddress: string
   ) => {
+    if (!config.contractAddress) {
+      throw new Error('Contract address not configured. Please set REACT_APP_CONTRACT_ADDRESS in .env file.');
+    }
+
     const body = beginCell()
       .storeCoins(toNano(amount))
       .storeAddress(Address.parse(recipientAddress))

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { TonConnectButton, useTonAddress } from '@tonconnect/ui-react';
 import { useTipBotContract } from '../../hooks/useTipBotContract';
 import { useTipBotData } from '../../hooks/useTipBotData';
+import { config } from '../../utils/config';
 import './style.scss';
 
 export function TipBotInteraction() {
@@ -37,6 +38,27 @@ export function TipBotInteraction() {
       setIsLoading(false);
     }
   };
+
+  if (!config.contractAddress) {
+    return (
+      <div className="tip-bot-container">
+        <div className="tip-bot-header">
+          <h1>💎 TonTip</h1>
+          <p>Send tips to your favorite creators on TON blockchain</p>
+        </div>
+        
+        <div className="config-warning">
+          <h3>⚠️ Configuration Required</h3>
+          <p>Contract address not configured. Please set up the environment variables:</p>
+          <ul>
+            <li>REACT_APP_CONTRACT_ADDRESS - The deployed TipBot contract address</li>
+            <li>REACT_APP_TELEGRAM_BOT_TOKEN - Your Telegram bot token (optional)</li>
+          </ul>
+          <p>Add these to your .env file and restart the development server.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="tip-bot-container">

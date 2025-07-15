@@ -1,6 +1,6 @@
+import { type NetworkProvider, sleep } from '@ton/blueprint';
 import { Address, toNano } from '@ton/core';
 import { TipBot } from '../build/TipBot/TipBot_TipBot';
-import { NetworkProvider, sleep } from '@ton/blueprint';
 
 export async function run(provider: NetworkProvider, args: string[]) {
     const ui = provider.ui();
@@ -15,7 +15,7 @@ export async function run(provider: NetworkProvider, args: string[]) {
     const tipBot = provider.open(TipBot.fromAddress(address));
 
     // Get initial total tips
-    const totalTipsBefore = await tipBot.getTotalTips();
+    const totalTipsBefore = await tipBot.getGetTotalTips();
     ui.write(`Total tips before: ${totalTipsBefore.toString()} nanoTON`);
 
     // Get recipient address
@@ -42,12 +42,12 @@ export async function run(provider: NetworkProvider, args: string[]) {
     ui.write('Waiting for tip to be processed...');
 
     // Check if total tips increased
-    let totalTipsAfter = await tipBot.getTotalTips();
+    let totalTipsAfter = await tipBot.getGetTotalTips();
     let attempt = 1;
     while (totalTipsAfter === totalTipsBefore) {
         ui.setActionPrompt(`Attempt ${attempt}`);
         await sleep(2000);
-        totalTipsAfter = await tipBot.getTotalTips();
+        totalTipsAfter = await tipBot.getGetTotalTips();
         attempt++;
     }
 

@@ -1,8 +1,5 @@
 import { THEME, TonConnectUIProvider } from "@tonconnect/ui-react";
-import { Link, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.scss';
-import { MainPage } from "./components/MainPage/MainPage";
-import { OldPage } from "./components/OldPage/OldPage";
 import { TipBotInteraction } from "./components/TipBotInteraction/TipBotInteraction";
 
 function App() {
@@ -362,21 +359,9 @@ function App() {
               twaReturnUrl: 'https://t.me/DemoDappWithTonConnectBot/demo'
           }}
       >
-        <Router>
-          <div className="app">
-            <nav className="app-nav">
-              <Link to="/" className="nav-link">TonTip</Link>
-              <Link to="/main" className="nav-link">Main</Link>
-              <Link to="/old" className="nav-link">Old Demo</Link>
-            </nav>
-            
-            <Routes>
-              <Route path="/" element={<TipBotInteraction />} />
-              <Route path="/main" element={<MainPage />} />
-              <Route path="/old" element={<OldPage />} />
-            </Routes>
-          </div>
-        </Router>
+        <div className="app">
+          <TipBotInteraction />
+        </div>
       </TonConnectUIProvider>
   )
 }

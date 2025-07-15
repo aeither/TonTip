@@ -151,6 +151,40 @@
       font-size: 1.1rem;
     }
   }
+
+  .config-warning {
+    background: #fff3cd;
+    border: 2px solid #ffeaa7;
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    margin: 2rem 0;
+    
+    h3 {
+      color: #856404;
+      margin: 0 0 1rem 0;
+      font-size: 1.3rem;
+    }
+    
+    p {
+      color: #856404;
+      margin: 0.5rem 0;
+      line-height: 1.5;
+    }
+    
+    ul {
+      text-align: left;
+      max-width: 400px;
+      margin: 1rem auto;
+      
+      li {
+        color: #856404;
+        margin: 0.5rem 0;
+        font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+        font-size: 0.9rem;
+      }
+    }
+  }
 }
 
 // Dark theme support
