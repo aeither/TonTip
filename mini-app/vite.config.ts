@@ -14,10 +14,7 @@ export default defineConfig({
     fs: {
       allow: ['../sdk', './'],
     },
-    allowedHosts: [
-      'basically-enough-clam.ngrok-free.app',
-      'localhost',
-      '127.0.0.1'
-    ],
+    allowedHosts: true, // Allow all hosts for ngrok development
+    host: true, // Allow external connections
   },
 })
