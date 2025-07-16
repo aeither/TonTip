@@ -6,8 +6,6 @@ import {
 } from "@tonconnect/ui-react";
 import { TonClient, Address, toNano } from "@ton/ton";
 import { Link } from "@tanstack/react-router";
-import { HelloWorld, storeAdd } from "../contracts/HelloWorld_HelloWorld";
-import { beginCell } from "@ton/core";
 
 const CONTRACT_ADDRESS = "EQDmj9bqTleRjqQ2PpuLEwhFzNJPL2_4SxPQF2l3AkAwGEtn";
 
@@ -20,24 +18,22 @@ export const HelloWorldPage: React.FC = () => {
   const [status, setStatus] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Initialize TON client and contract
+  // Initialize TON client for reading contract data
   const tonClient = new TonClient({ 
     endpoint: "https://toncenter.com/api/v2/jsonRPC"
   });
   const contractAddress = Address.parse(CONTRACT_ADDRESS);
-  const contract = HelloWorld.fromAddress(contractAddress);
 
   const fetchContractData = async () => {
     try {
       setIsLoading(true);
       
-      // Use the contract wrapper to get counter and id
-      const provider = tonClient.provider(contractAddress);
-      const counterResult = await contract.getCounter(provider);
-      const idResult = await contract.getId(provider);
+      // Use TonClient to call contract get methods
+      const counterResult = await tonClient.runMethod(contractAddress, "counter");
+      const idResult = await tonClient.runMethod(contractAddress, "id");
       
-      setCounter(Number(counterResult));
-      setId(Number(idResult));
+      setCounter(Number(counterResult.stack.readNumber()));
+      setId(Number(idResult.stack.readNumber()));
       setStatus("Contract data loaded successfully");
     } catch (err) {
       console.error("Failed to fetch contract data:", err);
@@ -54,6 +50,25 @@ export const HelloWorldPage: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Helper function to encode Add message payload
+  const encodeAddMessage = (amount: number): string => {
+    // Create a simple payload for Add message
+    // Add message opcode: 2278832834 (0x87ea83e2)
+    const buffer = new ArrayBuffer(8); // 4 bytes for opcode + 4 bytes for amount
+    const view = new DataView(buffer);
+    
+    // Write opcode (big endian)
+    view.setUint32(0, 2278832834, false);
+    // Write amount (big endian)  
+    view.setUint32(4, amount, false);
+    
+    // Convert to base64
+    const uint8Array = new Uint8Array(buffer);
+    const base64 = btoa(String.fromCharCode(...uint8Array));
+    
+    return base64;
+  };
+
   const onAddClick = async () => {
     if (!wallet) {
       setStatus("Please connect your TON wallet first.");
@@ -69,15 +84,8 @@ export const HelloWorldPage: React.FC = () => {
       setIsLoading(true);
       setStatus("Preparing transaction...");
 
-      // Build the payload using the generated contract wrapper
-      const addMessage = {
-        $$type: 'Add' as const,
-        amount: BigInt(addAmount)
-      };
-      
-      const payload = beginCell()
-        .store(storeAdd(addMessage))
-        .endCell();
+      // Encode the Add message payload
+      const payload = encodeAddMessage(addAmount);
 
       // Prepare transaction for TonConnect
       const tx = {
@@ -86,7 +94,7 @@ export const HelloWorldPage: React.FC = () => {
           {
             address: CONTRACT_ADDRESS,
             amount: toNano("0.05").toString(), // 0.05 TON for gas
-            payload: payload.toBoc().toString("base64"),
+            payload: payload,
           },
         ],
       };
