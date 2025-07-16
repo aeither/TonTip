@@ -39,7 +39,7 @@ export const Route = createRootRoute({
   component: () => (
     <RootDocument>
       <TonConnectUIProvider
-        manifestUrl="https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json"
+        manifestUrl="https://basically-enough-clam.ngrok-free.app/tonconnect-manifest.json"
         uiPreferences={{ theme: THEME.DARK }}
         walletsListConfiguration={{
           includeWallets: [
