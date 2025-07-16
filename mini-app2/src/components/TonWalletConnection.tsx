@@ -1,17 +1,56 @@
+import { useEffect } from "react";
 import { TonConnectButton, useTonConnectUI, useTonWallet } from "@tonconnect/ui-react";
 import { useTelegramWebApp } from "../hooks/useTelegramWebApp";
+import { useTonConnectDebug } from "../hooks/useTonConnectDebug";
+import { TonConnectDiagnostics } from "./TonConnectDiagnostics";
 import { Link } from "@tanstack/react-router";
 
 export function TonWalletConnection() {
   const wallet = useTonWallet();
   const [tonConnectUI] = useTonConnectUI();
   const { webApp, isLoading } = useTelegramWebApp();
+  
+  // Initialize debug hooks
+  useTonConnectDebug();
+  
+  // Add debugging for wallet connection state
+  useEffect(() => {
+    console.log('[TonWalletConnection Debug] Component mounted');
+    console.log('[TonWalletConnection Debug] Initial state:', {
+      wallet: !!wallet,
+      walletAddress: wallet?.account?.address,
+      walletChain: wallet?.account?.chain,
+      tonConnectUIConnected: tonConnectUI?.connected,
+      tonConnectUIAccount: tonConnectUI?.account,
+      isLoading,
+      webApp: !!webApp
+    });
+  }, []);
+  
+  useEffect(() => {
+    console.log('[TonWalletConnection Debug] Wallet state changed:', {
+      connected: !!wallet,
+      address: wallet?.account?.address,
+      chain: wallet?.account?.chain,
+      publicKey: wallet?.account?.publicKey
+    });
+  }, [wallet]);
+  
+  useEffect(() => {
+    console.log('[TonWalletConnection Debug] TonConnect UI state changed:', {
+      connected: tonConnectUI?.connected,
+      account: tonConnectUI?.account,
+      wallet: tonConnectUI?.wallet
+    });
+  }, [tonConnectUI?.connected, tonConnectUI?.account]);
 
   const handleDisconnect = () => {
-    tonConnectUI.disconnect();
+    console.log('[TonWalletConnection Debug] Disconnecting wallet...');
+    tonConnectUI?.disconnect();
   };
 
   if (isLoading) {
+    console.log('[TonWalletConnection Debug] Showing loading state');
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-[#282c34] text-white">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-white"></div>
@@ -19,6 +58,8 @@ export function TonWalletConnection() {
       </div>
     );
   }
+  
+  console.log('[TonWalletConnection Debug] Rendering main component with wallet:', !!wallet);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#282c34] text-white p-4">
@@ -48,10 +89,19 @@ export function TonWalletConnection() {
               <p className="text-sm">{wallet.account.chain}</p>
             </div>
             
-            {/* Navigation to contract pages */}
+                {/* Debug diagnostics */}
+            <TonConnectDiagnostics />
+            
+            {/* Navigation to app features */}
             <div className="bg-[#4a5058] rounded-lg p-4">
-              <h3 className="text-lg font-semibold mb-3">Contract Interactions</h3>
+              <h3 className="text-lg font-semibold mb-3">TonTip Features</h3>
               <div className="space-y-2">
+                <Link 
+                  to="/quizzes" 
+                  className="block w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded transition-colors text-center"
+                >
+                  📚 Quiz Challenges
+                </Link>
                 <Link 
                   to="/hello-world" 
                   className="block w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition-colors text-center"
