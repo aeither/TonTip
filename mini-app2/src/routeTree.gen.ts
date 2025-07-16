@@ -11,6 +11,8 @@
 import { createServerRootRoute } from '@tanstack/react-start/server'
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RewardContractRouteImport } from './routes/reward-contract'
+import { Route as HelloWorldRouteImport } from './routes/hello-world'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo.start.server-funcs'
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo.start.api-request'
@@ -18,6 +20,16 @@ import { ServerRoute as ApiDemoNamesServerRouteImport } from './routes/api.demo-
 
 const rootServerRouteImport = createServerRootRoute()
 
+const RewardContractRoute = RewardContractRouteImport.update({
+  id: '/reward-contract',
+  path: '/reward-contract',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelloWorldRoute = HelloWorldRouteImport.update({
+  id: '/hello-world',
+  path: '/hello-world',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -41,30 +53,54 @@ const ApiDemoNamesServerRoute = ApiDemoNamesServerRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/hello-world': typeof HelloWorldRoute
+  '/reward-contract': typeof RewardContractRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/hello-world': typeof HelloWorldRoute
+  '/reward-contract': typeof RewardContractRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/hello-world': typeof HelloWorldRoute
+  '/reward-contract': typeof RewardContractRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/demo/start/api-request' | '/demo/start/server-funcs'
+  fullPaths:
+    | '/'
+    | '/hello-world'
+    | '/reward-contract'
+    | '/demo/start/api-request'
+    | '/demo/start/server-funcs'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/demo/start/api-request' | '/demo/start/server-funcs'
-  id: '__root__' | '/' | '/demo/start/api-request' | '/demo/start/server-funcs'
+  to:
+    | '/'
+    | '/hello-world'
+    | '/reward-contract'
+    | '/demo/start/api-request'
+    | '/demo/start/server-funcs'
+  id:
+    | '__root__'
+    | '/'
+    | '/hello-world'
+    | '/reward-contract'
+    | '/demo/start/api-request'
+    | '/demo/start/server-funcs'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  HelloWorldRoute: typeof HelloWorldRoute
+  RewardContractRoute: typeof RewardContractRoute
   DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
   DemoStartServerFuncsRoute: typeof DemoStartServerFuncsRoute
 }
@@ -92,6 +128,20 @@ export interface RootServerRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/reward-contract': {
+      id: '/reward-contract'
+      path: '/reward-contract'
+      fullPath: '/reward-contract'
+      preLoaderRoute: typeof RewardContractRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hello-world': {
+      id: '/hello-world'
+      path: '/hello-world'
+      fullPath: '/hello-world'
+      preLoaderRoute: typeof HelloWorldRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -129,6 +179,8 @@ declare module '@tanstack/react-start/server' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  HelloWorldRoute: HelloWorldRoute,
+  RewardContractRoute: RewardContractRoute,
   DemoStartApiRequestRoute: DemoStartApiRequestRoute,
   DemoStartServerFuncsRoute: DemoStartServerFuncsRoute,
 }
