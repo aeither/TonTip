@@ -7,7 +7,7 @@ import {
 import { TonClient, Address, toNano } from "@ton/ton";
 import { Link } from "@tanstack/react-router";
 import { getQuizById } from "../data/quizzes";
-import { Quiz, UserQuizProgress } from "../types/quiz";
+import type { Quiz, UserQuizProgress } from "../types/quiz";
 
 // TODO: Replace with actual deployed reward contract address
 const REWARD_CONTRACT_ADDRESS = "EQBvW8Z5huBkMJYdnfAEM5JqTNkuWX3diqYENkWsIL0XggGG";
@@ -257,8 +257,8 @@ export const QuizRewardClaimPage: React.FC<QuizRewardClaimPageProps> = ({ quizId
       <div className="min-h-screen bg-[#282c34] text-white p-4">
         <div className="max-w-2xl mx-auto text-center py-12">
           <h1 className="text-2xl font-bold mb-4">Quiz Not Found</h1>
-          <Link to="/quizzes" className="text-blue-400 hover:text-blue-300">
-            ← Back to Quizzes
+          <Link to="/" className="text-blue-400 hover:text-blue-300">
+            ← Back to Home
           </Link>
         </div>
       </div>
@@ -266,24 +266,24 @@ export const QuizRewardClaimPage: React.FC<QuizRewardClaimPageProps> = ({ quizId
   }
 
   return (
-    <div className="min-h-screen bg-[#282c34] text-white p-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#58cc02] to-[#37a500] text-white p-4">
       <div className="max-w-md mx-auto">
         {/* Navigation */}
         <div className="mb-6">
           <Link 
-            to="/quizzes" 
-            className="text-blue-400 hover:text-blue-300 text-sm"
+            to="/" 
+            className="text-white/80 hover:text-white text-sm flex items-center gap-2"
           >
-            ← Back to Quizzes
+            ← Back to Home
           </Link>
         </div>
 
         {/* Header */}
-        <div className="bg-[#3a3f47] rounded-lg p-6 mb-6">
+        <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 mb-6 shadow-xl border border-white/50">
           <div className="text-center">
             <div className="text-4xl mb-2">{quiz.icon}</div>
-            <h1 className="text-2xl font-bold mb-2">Claim Quiz Reward</h1>
-            <h2 className="text-lg text-gray-300">{quiz.title}</h2>
+            <h1 className="text-2xl font-bold text-gray-800 mb-2">Claim Quiz Reward</h1>
+            <h2 className="text-lg text-gray-600">{quiz.title}</h2>
           </div>
           <div className="mt-4">
             <TonConnectButton />
@@ -291,28 +291,28 @@ export const QuizRewardClaimPage: React.FC<QuizRewardClaimPageProps> = ({ quizId
         </div>
 
         {/* Quiz Performance */}
-        <div className="bg-[#3a3f47] rounded-lg p-6 mb-6">
-          <h2 className="text-lg font-semibold mb-4">Your Performance</h2>
+        <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 mb-6 shadow-xl border border-white/50">
+          <h2 className="text-lg font-semibold text-gray-800 mb-4">Your Performance</h2>
           <div className="space-y-3">
             <div className="flex justify-between">
-              <span className="text-gray-400">Score:</span>
-              <span className="font-semibold">
+              <span className="text-gray-600">Score:</span>
+              <span className="font-semibold text-gray-800">
                 {userProgress?.bestScore || 0}/{quiz.questions.length}
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-400">Percentage:</span>
-              <span className="font-semibold">
+              <span className="text-gray-600">Percentage:</span>
+              <span className="font-semibold text-gray-800">
                 {userProgress ? Math.round((userProgress.bestScore / quiz.questions.length) * 100) : 0}%
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-400">Attempts:</span>
-              <span className="font-semibold">{userProgress?.attempts || 0}</span>
+              <span className="text-gray-600">Attempts:</span>
+              <span className="font-semibold text-gray-800">{userProgress?.attempts || 0}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-400">Status:</span>
-              <span className={`font-semibold ${userProgress?.completed ? 'text-green-400' : 'text-red-400'}`}>
+              <span className="text-gray-600">Status:</span>
+              <span className={`font-semibold ${userProgress?.completed ? 'text-green-600' : 'text-red-600'}`}>
                 {userProgress?.completed ? 'Completed' : 'Not Completed'}
               </span>
             </div>
@@ -320,20 +320,20 @@ export const QuizRewardClaimPage: React.FC<QuizRewardClaimPageProps> = ({ quizId
         </div>
 
         {/* Reward Information */}
-        <div className="bg-[#3a3f47] rounded-lg p-6 mb-6">
-          <h2 className="text-lg font-semibold mb-4">Reward Details</h2>
+        <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 mb-6 shadow-xl border border-white/50">
+          <h2 className="text-lg font-semibold text-gray-800 mb-4">Reward Details</h2>
           <div className="space-y-3">
             <div className="flex justify-between">
-              <span className="text-gray-400">Reward Amount:</span>
-              <span className="font-semibold text-purple-400">{quiz.rewardAmount} TON</span>
+              <span className="text-gray-600">Reward Amount:</span>
+              <span className="font-semibold text-purple-600">{quiz.rewardAmount} TON</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-400">Contract Balance:</span>
-              <span className="font-semibold">{contractBalance || "Loading..."} TON</span>
+              <span className="text-gray-600">Contract Balance:</span>
+              <span className="font-semibold text-gray-800">{contractBalance || "Loading..."} TON</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-400">Reward Status:</span>
-              <span className={`font-semibold ${userProgress?.rewardClaimed ? 'text-green-400' : 'text-yellow-400'}`}>
+              <span className="text-gray-600">Reward Status:</span>
+              <span className={`font-semibold ${userProgress?.rewardClaimed ? 'text-green-600' : 'text-yellow-600'}`}>
                 {userProgress?.rewardClaimed ? '✓ Claimed' : 'Available'}
               </span>
             </div>
@@ -341,24 +341,24 @@ export const QuizRewardClaimPage: React.FC<QuizRewardClaimPageProps> = ({ quizId
         </div>
 
         {/* Contract Info */}
-        <div className="bg-[#3a3f47] rounded-lg p-6 mb-6">
-          <h2 className="text-lg font-semibold mb-4">Contract Information</h2>
+        <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 mb-6 shadow-xl border border-white/50">
+          <h2 className="text-lg font-semibold text-gray-800 mb-4">Contract Information</h2>
           <div className="space-y-2">
             <div>
-              <span className="text-gray-400">Connected Wallet:</span>
-              <p className="font-mono text-sm break-all">
+              <span className="text-gray-600">Connected Wallet:</span>
+              <p className="font-mono text-sm break-all text-gray-800">
                 {wallet?.account.address || "None"}
               </p>
             </div>
             <div>
-              <span className="text-gray-400">Reward Contract:</span>
+              <span className="text-gray-600">Reward Contract:</span>
               <div className="flex items-center gap-2">
-                <p className="font-mono text-sm break-all flex-1">{REWARD_CONTRACT_ADDRESS}</p>
+                <p className="font-mono text-sm break-all flex-1 text-gray-800">{REWARD_CONTRACT_ADDRESS}</p>
                 <a
                   href={`https://tonscan.org/address/${REWARD_CONTRACT_ADDRESS}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 hover:text-blue-300 text-sm bg-blue-600/20 px-2 py-1 rounded"
+                  className="text-blue-600 hover:text-blue-700 text-sm bg-blue-100 px-2 py-1 rounded"
                 >
                   Explorer
                 </a>
@@ -369,42 +369,42 @@ export const QuizRewardClaimPage: React.FC<QuizRewardClaimPageProps> = ({ quizId
           <button
             onClick={fetchContractData}
             disabled={isLoading}
-            className="mt-4 w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white font-semibold py-2 px-4 rounded transition-colors"
+            className="mt-4 w-full bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:hover:scale-100"
           >
-            {isLoading ? "Loading..." : "Refresh Data"}
+            {isLoading ? "Loading..." : "🔄 Refresh Data"}
           </button>
         </div>
 
         {/* Claim Reward */}
-        <div className="bg-[#3a3f47] rounded-lg p-6 mb-6">
-          <h2 className="text-lg font-semibold mb-4">Claim Your Reward</h2>
+        <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 mb-6 shadow-xl border border-white/50">
+          <h2 className="text-lg font-semibold text-gray-800 mb-4">Claim Your Reward</h2>
           
           {!wallet && (
-            <div className="bg-yellow-600/20 border border-yellow-600/50 rounded-lg p-4 mb-4">
-              <p className="text-yellow-300 text-sm">
-                Please connect your wallet to claim rewards.
+            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-4">
+              <p className="text-yellow-700 text-sm">
+                💡 Please connect your wallet to claim rewards.
               </p>
             </div>
           )}
 
           {!canClaim && wallet && (
-            <div className="bg-red-600/20 border border-red-600/50 rounded-lg p-4 mb-4">
-              <p className="text-red-300 text-sm">
+            <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-4">
+              <p className="text-red-700 text-sm">
                 {userProgress?.rewardClaimed 
-                  ? "You have already claimed the reward for this quiz."
+                  ? "✅ You have already claimed the reward for this quiz."
                   : !userProgress?.completed 
-                    ? "Complete the quiz with a perfect score to claim the reward."
+                    ? "📝 Complete the quiz with a perfect score to claim the reward."
                     : userProgress?.bestScore !== quiz.questions.length
-                      ? "You need a perfect score to claim the reward."
-                      : "You are not eligible to claim this reward."
+                      ? "🎯 You need a perfect score to claim the reward."
+                      : "❌ You are not eligible to claim this reward."
                 }
               </p>
             </div>
           )}
 
           {canClaim && (
-            <div className="bg-green-600/20 border border-green-600/50 rounded-lg p-4 mb-4">
-              <p className="text-green-300 text-sm">
+            <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-4">
+              <p className="text-green-700 text-sm">
                 🎊 Congratulations! You can claim {quiz.rewardAmount} TON for completing this quiz perfectly!
               </p>
             </div>
@@ -413,17 +413,17 @@ export const QuizRewardClaimPage: React.FC<QuizRewardClaimPageProps> = ({ quizId
           <button
             onClick={onClaimRewardClick}
             disabled={!wallet || isLoading || !canClaim}
-            className="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 text-white font-semibold py-3 px-4 rounded transition-colors"
+            className="w-full bg-purple-500 hover:bg-purple-600 disabled:bg-gray-300 disabled:text-gray-500 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:hover:scale-100 shadow-lg"
           >
-            {isLoading ? "Processing..." : `Claim ${quiz.rewardAmount} TON Reward 💰`}
+            {isLoading ? "⏳ Processing..." : `💰 Claim ${quiz.rewardAmount} TON Reward`}
           </button>
         </div>
 
         {/* Status */}
         {status && (
-          <div className="bg-[#3a3f47] rounded-lg p-4">
-            <h3 className="text-sm font-semibold mb-2">Status:</h3>
-            <p className="text-sm text-gray-300">{status}</p>
+          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-xl border border-white/50">
+            <h3 className="text-sm font-semibold text-gray-800 mb-2">Status:</h3>
+            <p className="text-sm text-gray-600">{status}</p>
           </div>
         )}
       </div>

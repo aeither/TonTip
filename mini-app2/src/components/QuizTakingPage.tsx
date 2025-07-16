@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { TonConnectButton, useTonWallet } from "@tonconnect/ui-react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { TonConnectButton } from "@tonconnect/ui-react";
+import { Link } from "@tanstack/react-router";
 import { getQuizById } from "../data/quizzes";
-import { Quiz, QuizResult, UserQuizProgress } from "../types/quiz";
+import type { Quiz, QuizResult, UserQuizProgress } from "../types/quiz";
 
 interface QuizTakingPageProps {
   quizId: string;
 }
 
 export const QuizTakingPage: React.FC<QuizTakingPageProps> = ({ quizId }) => {
-  const wallet = useTonWallet();
-  const navigate = useNavigate();
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
@@ -145,8 +143,8 @@ export const QuizTakingPage: React.FC<QuizTakingPageProps> = ({ quizId }) => {
       <div className="min-h-screen bg-[#282c34] text-white p-4">
         <div className="max-w-2xl mx-auto text-center py-12">
           <h1 className="text-2xl font-bold mb-4">Quiz Not Found</h1>
-          <Link to="/quizzes" className="text-blue-400 hover:text-blue-300">
-            ← Back to Quizzes
+          <Link to="/" className="text-blue-400 hover:text-blue-300">
+            ← Back to Home
           </Link>
         </div>
       </div>
@@ -160,38 +158,40 @@ export const QuizTakingPage: React.FC<QuizTakingPageProps> = ({ quizId }) => {
   // Quiz start screen
   if (!quizStarted) {
     return (
-      <div className="min-h-screen bg-[#282c34] text-white p-4">
+      <div className="min-h-screen bg-gradient-to-br from-[#58cc02] to-[#37a500] text-white p-4">
         <div className="max-w-2xl mx-auto">
           <div className="mb-6">
-            <Link to="/quizzes" className="text-blue-400 hover:text-blue-300 text-sm">
-              ← Back to Quizzes
+            <Link to="/" className="text-white/80 hover:text-white text-sm flex items-center gap-2">
+              ← Back to Home
             </Link>
           </div>
 
-          <div className="bg-[#3a3f47] rounded-lg p-8 text-center">
+          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 text-center shadow-2xl border border-white/50">
             <div className="text-6xl mb-4">{quiz.icon}</div>
-            <h1 className="text-3xl font-bold mb-4">{quiz.title}</h1>
-            <p className="text-gray-300 mb-6">{quiz.description}</p>
+            <h1 className="text-3xl font-bold text-gray-800 mb-4">{quiz.title}</h1>
+            <p className="text-gray-600 mb-6">{quiz.description}</p>
             
             <div className="grid grid-cols-2 gap-4 mb-8">
-              <div className="bg-[#2a2d34] rounded p-4">
-                <div className="text-2xl font-bold text-blue-400">{quiz.questions.length}</div>
-                <div className="text-sm text-gray-400">Questions</div>
+              <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
+                <div className="text-2xl font-bold text-blue-600">{quiz.questions.length}</div>
+                <div className="text-sm text-blue-500">Questions</div>
               </div>
-              <div className="bg-[#2a2d34] rounded p-4">
-                <div className="text-2xl font-bold text-green-400">{quiz.estimatedTime}</div>
-                <div className="text-sm text-gray-400">Minutes</div>
+              <div className="bg-green-50 rounded-xl p-4 border border-green-200">
+                <div className="text-2xl font-bold text-green-600">{quiz.estimatedTime}</div>
+                <div className="text-sm text-green-500">Minutes</div>
               </div>
             </div>
 
             <div className="mb-6">
-              <div className="flex items-center justify-center gap-2 text-purple-400 text-lg font-semibold">
-                <span>💎</span>
-                <span>Reward: {quiz.rewardAmount} TON</span>
+              <div className="bg-purple-50 rounded-xl p-4 border border-purple-200">
+                <div className="flex items-center justify-center gap-2 text-purple-600 text-lg font-semibold">
+                  <span>💎</span>
+                  <span>Reward: {quiz.rewardAmount} TON</span>
+                </div>
+                <p className="text-sm text-purple-500 mt-2">
+                  Complete all questions correctly to earn the full reward!
+                </p>
               </div>
-              <p className="text-sm text-gray-400 mt-2">
-                Complete all questions correctly to earn the full reward!
-              </p>
             </div>
 
             <div className="mb-6">
@@ -200,9 +200,9 @@ export const QuizTakingPage: React.FC<QuizTakingPageProps> = ({ quizId }) => {
 
             <button
               onClick={startQuiz}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg text-lg transition-colors"
+              className="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-12 rounded-2xl text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
             >
-              Start Quiz
+              🚀 Start Quiz
             </button>
           </div>
         </div>
@@ -213,39 +213,39 @@ export const QuizTakingPage: React.FC<QuizTakingPageProps> = ({ quizId }) => {
   // Quiz completion screen
   if (quizCompleted) {
     return (
-      <div className="min-h-screen bg-[#282c34] text-white p-4">
+      <div className="min-h-screen bg-gradient-to-br from-[#58cc02] to-[#37a500] text-white p-4">
         <div className="max-w-2xl mx-auto">
-          <div className="bg-[#3a3f47] rounded-lg p-8 text-center">
+          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 text-center shadow-2xl border border-white/50">
             <div className="text-6xl mb-4">
               {isPerfectScore ? "🏆" : score >= quiz.questions.length * 0.7 ? "🎉" : "📚"}
             </div>
             
-            <h1 className="text-3xl font-bold mb-4">
+            <h1 className="text-3xl font-bold text-gray-800 mb-4">
               {isPerfectScore ? "Perfect Score!" : "Quiz Completed!"}
             </h1>
             
-            <div className="bg-[#2a2d34] rounded-lg p-6 mb-6">
-              <div className="text-4xl font-bold mb-2">
+            <div className="bg-blue-50 rounded-xl p-6 mb-6 border border-blue-200">
+              <div className="text-4xl font-bold text-blue-600 mb-2">
                 {score}/{quiz.questions.length}
               </div>
-              <div className="text-gray-400">Correct Answers</div>
-              <div className="text-lg mt-2">
+              <div className="text-blue-500">Correct Answers</div>
+              <div className="text-lg text-blue-600 mt-2 font-semibold">
                 {Math.round((score / quiz.questions.length) * 100)}% Score
               </div>
             </div>
 
             {isPerfectScore && (
-              <div className="bg-purple-600/20 border border-purple-600/50 rounded-lg p-4 mb-6">
-                <div className="text-purple-400 font-semibold mb-2">🎊 Congratulations!</div>
-                <div className="text-white">
+              <div className="bg-purple-50 border border-purple-200 rounded-xl p-6 mb-6">
+                <div className="text-purple-600 font-bold text-lg mb-2">🎊 Congratulations!</div>
+                <div className="text-purple-700 mb-4">
                   You earned {quiz.rewardAmount} TON for perfect completion!
                 </div>
                 <Link
                   to="/quiz/$quizId/claim"
                   params={{ quizId: quiz.id }}
-                  className="inline-block mt-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded transition-colors"
+                  className="inline-block bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
                 >
-                  Claim Reward 💰
+                  💰 Claim Reward
                 </Link>
               </div>
             )}
@@ -253,15 +253,15 @@ export const QuizTakingPage: React.FC<QuizTakingPageProps> = ({ quizId }) => {
             <div className="flex gap-4 justify-center">
               <button
                 onClick={restartQuiz}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded transition-colors"
+                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105"
               >
-                Try Again
+                🔄 Try Again
               </button>
               <Link
-                to="/quizzes"
-                className="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-6 rounded transition-colors"
+                to="/"
+                className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105"
               >
-                Back to Quizzes
+                🏠 Back Home
               </Link>
             </div>
           </div>
@@ -272,56 +272,60 @@ export const QuizTakingPage: React.FC<QuizTakingPageProps> = ({ quizId }) => {
 
   // Quiz taking screen
   return (
-    <div className="min-h-screen bg-[#282c34] text-white p-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#58cc02] to-[#37a500] text-white p-4">
       <div className="max-w-2xl mx-auto">
         {/* Header with progress */}
-        <div className="bg-[#3a3f47] rounded-lg p-4 mb-6">
+        <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 mb-6 shadow-xl border border-white/50">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-xl font-bold">{quiz.title}</h1>
-            <div className="text-lg font-mono">
+            <h1 className="text-xl font-bold text-gray-800">{quiz.title}</h1>
+            <div className="text-lg font-mono text-gray-700">
               ⏱️ {formatTime(timeLeft)}
             </div>
           </div>
           
-          <div className="flex items-center justify-between text-sm text-gray-400 mb-2">
+          <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
             <span>Question {currentQuestionIndex + 1} of {quiz.questions.length}</span>
             <span>{Math.round(progress)}% Complete</span>
           </div>
           
-          <div className="w-full bg-[#2a2d34] rounded-full h-2">
+          <div className="w-full bg-gray-200 rounded-full h-3">
             <div
-              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+              className="bg-gradient-to-r from-green-400 to-green-600 h-3 rounded-full transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>
         </div>
 
         {/* Question */}
-        <div className="bg-[#3a3f47] rounded-lg p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-6">{currentQuestion.question}</h2>
+        <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 mb-6 shadow-xl border border-white/50">
+          <h2 className="text-xl font-semibold text-gray-800 mb-6">{currentQuestion.question}</h2>
           
-          <div className="space-y-3">
+          <div className="space-y-4">
             {currentQuestion.options.map((option, index) => (
               <button
                 key={index}
                 onClick={() => handleAnswerSelect(index)}
-                className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
+                className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-300 transform hover:scale-102 ${
                   selectedAnswer === index
-                    ? 'border-blue-500 bg-blue-600/20'
-                    : 'border-gray-600 bg-[#2a2d34] hover:border-gray-500'
+                    ? 'border-green-500 bg-green-50 shadow-lg'
+                    : 'border-gray-200 bg-white hover:border-green-300 hover:bg-green-25'
                 }`}
               >
                 <div className="flex items-center">
-                  <div className={`w-6 h-6 rounded-full border-2 mr-3 flex items-center justify-center ${
+                  <div className={`w-6 h-6 rounded-full border-2 mr-4 flex items-center justify-center transition-all ${
                     selectedAnswer === index
-                      ? 'border-blue-500 bg-blue-500'
+                      ? 'border-green-500 bg-green-500'
                       : 'border-gray-400'
                   }`}>
                     {selectedAnswer === index && (
                       <div className="w-3 h-3 rounded-full bg-white" />
                     )}
                   </div>
-                  <span>{option}</span>
+                  <span className={`${
+                    selectedAnswer === index 
+                      ? 'text-green-800 font-semibold' 
+                      : 'text-gray-700'
+                  }`}>{option}</span>
                 </div>
               </button>
             ))}
@@ -336,29 +340,29 @@ export const QuizTakingPage: React.FC<QuizTakingPageProps> = ({ quizId }) => {
         </div>
 
         {/* Navigation */}
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row gap-4 items-center">
           <button
             onClick={handlePreviousQuestion}
             disabled={currentQuestionIndex === 0}
-            className="bg-gray-600 hover:bg-gray-700 disabled:bg-gray-800 disabled:text-gray-500 text-white font-semibold py-2 px-6 rounded transition-colors"
+            className="w-full sm:w-auto bg-gray-500 hover:bg-gray-600 disabled:bg-gray-300 disabled:text-gray-500 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:hover:scale-100"
           >
-            Previous
+            ← Previous
           </button>
 
           <button
             onClick={() => setShowExplanation(!showExplanation)}
             disabled={selectedAnswer === null}
-            className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 text-white font-semibold py-2 px-6 rounded transition-colors"
+            className="w-full sm:w-auto bg-indigo-500 hover:bg-indigo-600 disabled:bg-gray-300 disabled:text-gray-500 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:hover:scale-100"
           >
-            {showExplanation ? "Hide" : "Show"} Explanation
+            {showExplanation ? "🙈 Hide" : "💡 Show"} Explanation
           </button>
 
           <button
             onClick={handleNextQuestion}
             disabled={selectedAnswer === null}
-            className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white font-semibold py-2 px-6 rounded transition-colors"
+            className="w-full sm:w-auto bg-green-500 hover:bg-green-600 disabled:bg-gray-300 disabled:text-gray-500 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:hover:scale-100"
           >
-            {currentQuestionIndex === quiz.questions.length - 1 ? "Finish Quiz" : "Next"}
+            {currentQuestionIndex === quiz.questions.length - 1 ? "🏁 Finish Quiz" : "Next →"}
           </button>
         </div>
       </div>

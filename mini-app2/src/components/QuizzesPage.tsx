@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { TonConnectButton, useTonWallet } from "@tonconnect/ui-react";
 import { Link } from "@tanstack/react-router";
 import { quizzes } from "../data/quizzes";
-import { Quiz, UserQuizProgress } from "../types/quiz";
+import type { Quiz, UserQuizProgress } from "../types/quiz";
 
 export const QuizzesPage: React.FC = () => {
   const wallet = useTonWallet();

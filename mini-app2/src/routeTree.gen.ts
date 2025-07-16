@@ -12,7 +12,7 @@ import { createServerRootRoute } from '@tanstack/react-start/server'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as RewardContractRouteImport } from './routes/reward-contract'
-import { Route as QuizzesRouteImport } from './routes/quizzes'
+import { Route as PlaygroundRouteImport } from './routes/playground'
 import { Route as HelloWorldRouteImport } from './routes/hello-world'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as QuizQuizIdRouteImport } from './routes/quiz.$quizId'
@@ -28,9 +28,9 @@ const RewardContractRoute = RewardContractRouteImport.update({
   path: '/reward-contract',
   getParentRoute: () => rootRouteImport,
 } as any)
-const QuizzesRoute = QuizzesRouteImport.update({
-  id: '/quizzes',
-  path: '/quizzes',
+const PlaygroundRoute = PlaygroundRouteImport.update({
+  id: '/playground',
+  path: '/playground',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HelloWorldRoute = HelloWorldRouteImport.update({
@@ -72,7 +72,7 @@ const ApiDemoNamesServerRoute = ApiDemoNamesServerRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/hello-world': typeof HelloWorldRoute
-  '/quizzes': typeof QuizzesRoute
+  '/playground': typeof PlaygroundRoute
   '/reward-contract': typeof RewardContractRoute
   '/quiz/$quizId': typeof QuizQuizIdRouteWithChildren
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
@@ -82,7 +82,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/hello-world': typeof HelloWorldRoute
-  '/quizzes': typeof QuizzesRoute
+  '/playground': typeof PlaygroundRoute
   '/reward-contract': typeof RewardContractRoute
   '/quiz/$quizId': typeof QuizQuizIdRouteWithChildren
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
@@ -93,7 +93,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/hello-world': typeof HelloWorldRoute
-  '/quizzes': typeof QuizzesRoute
+  '/playground': typeof PlaygroundRoute
   '/reward-contract': typeof RewardContractRoute
   '/quiz/$quizId': typeof QuizQuizIdRouteWithChildren
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
@@ -105,7 +105,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/hello-world'
-    | '/quizzes'
+    | '/playground'
     | '/reward-contract'
     | '/quiz/$quizId'
     | '/demo/start/api-request'
@@ -115,7 +115,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/hello-world'
-    | '/quizzes'
+    | '/playground'
     | '/reward-contract'
     | '/quiz/$quizId'
     | '/demo/start/api-request'
@@ -125,7 +125,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/hello-world'
-    | '/quizzes'
+    | '/playground'
     | '/reward-contract'
     | '/quiz/$quizId'
     | '/demo/start/api-request'
@@ -136,7 +136,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   HelloWorldRoute: typeof HelloWorldRoute
-  QuizzesRoute: typeof QuizzesRoute
+  PlaygroundRoute: typeof PlaygroundRoute
   RewardContractRoute: typeof RewardContractRoute
   QuizQuizIdRoute: typeof QuizQuizIdRouteWithChildren
   DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
@@ -173,11 +173,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RewardContractRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/quizzes': {
-      id: '/quizzes'
-      path: '/quizzes'
-      fullPath: '/quizzes'
-      preLoaderRoute: typeof QuizzesRouteImport
+    '/playground': {
+      id: '/playground'
+      path: '/playground'
+      fullPath: '/playground'
+      preLoaderRoute: typeof PlaygroundRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/hello-world': {
@@ -251,7 +251,7 @@ const QuizQuizIdRouteWithChildren = QuizQuizIdRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HelloWorldRoute: HelloWorldRoute,
-  QuizzesRoute: QuizzesRoute,
+  PlaygroundRoute: PlaygroundRoute,
   RewardContractRoute: RewardContractRoute,
   QuizQuizIdRoute: QuizQuizIdRouteWithChildren,
   DemoStartApiRequestRoute: DemoStartApiRequestRoute,

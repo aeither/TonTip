@@ -1,10 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { TonWalletConnection } from '../components/TonWalletConnection'
+import { DuolingoHomePage } from '../components/DuolingoHomePage'
 
 export const Route = createFileRoute('/')({
   component: App,
 })
 
 function App() {
-  return <TonWalletConnection />
+  return <DuolingoHomePage />
 }

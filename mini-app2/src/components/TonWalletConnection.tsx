@@ -97,10 +97,10 @@ export function TonWalletConnection() {
               <h3 className="text-lg font-semibold mb-3">TonTip Features</h3>
               <div className="space-y-2">
                 <Link 
-                  to="/quizzes" 
+                  to="/" 
                   className="block w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded transition-colors text-center"
                 >
-                  📚 Quiz Challenges
+                  📚 Home
                 </Link>
                 <Link 
                   to="/hello-world" 

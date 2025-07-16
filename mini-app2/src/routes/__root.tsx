@@ -113,7 +113,7 @@ export const Route = createRootRoute({
           restoreConnection={true}
         >
           <Outlet />
-          <TanStackRouterDevtools />
+          {/* <TanStackRouterDevtools /> */}
         </TonConnectUIProvider>
       </RootDocument>
     );
