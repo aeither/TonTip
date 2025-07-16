@@ -9,3 +9,6 @@
 
  >  npx blueprint create AnotherContract
  create a new contract and all related necessary files
+
+ Tests
+ npm test -- tests/RewardContract.spec.ts
