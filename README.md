@@ -23,130 +23,132 @@ TonTip is a comprehensive Telegram Mini App that offers:
 - **Reward Distribution**: Manual reward systems are inefficient and prone to errors
 - **User Onboarding**: New users need simple ways to interact with blockchain technology
 
-## Challenges I ran into
+## TON Blockchain Integration
 
-- **Telegram WebApp Limitations**: Working within Telegram's restricted WebView environment required special handling for wallet connections and deep linking
-- **TON Blockchain Integration**: Implementing secure smart contract interactions while maintaining user-friendly experience
-- **Cross-Platform Compatibility**: Ensuring the app works across different devices and Telegram versions
-- **State Management**: Managing complex quiz state, user progress, and blockchain transactions
-- **UI/UX Design**: Creating an intuitive interface that works well on mobile devices within Telegram's constraints
-- **Smart Contract Development**: Learning TON's Tact language and implementing secure reward distribution logic
-- **Testing**: Comprehensive testing of both frontend components and smart contract functionality
+### Smart Contracts
 
-## Technologies I used
+TonTip uses three main smart contracts built with the **Tact language**:
 
-### Frontend
-- **React 19** with TypeScript for type-safe development
-- **TanStack Router** for modern client-side routing
-- **Tailwind CSS** for responsive design and glass morphism effects
-- **Vite** for fast development and building
-- **TanStack Start** for full-stack React framework
+#### 1. Reward Contract (`contracts/reward_contract.tact`)
+- **Purpose**: Manages quiz rewards and fund distribution
+- **Key Features**:
+  - Accepts user deposits (TON contributions)
+  - Distributes 0.01 TON rewards for perfect quiz completion
+  - Owner-only withdrawal functionality
+  - Secure transaction validation
+- **Contract Address**: `EQBvW8Z5huBkMJYdnfAEM5JqTNkuWX3diqYENkWsIL0XggGG`
+- **Reward Amount**: 0.01 TON per perfect quiz completion
 
-### Blockchain
-- **TON Blockchain** for decentralized infrastructure
-- **Tact Language** for smart contract development
-- **@ton/core** and **@ton/ton** for blockchain interactions
-- **TonConnect** for wallet integration
-- **@tonconnect/ui-react** for React wallet components
+#### 2. HelloWorld Contract (`contracts/hello_world.tact`)
+- **Purpose**: Simple counter contract for testing blockchain interactions
+- **Key Features**:
+  - Incrementable counter
+  - Basic smart contract interaction testing
+  - Gas estimation validation
+- **Contract Address**: `EQDmj9bqTleRjqQ2PpuLEwhFzNJPL2_4SxPQF2l3AkAwGEtn`
 
-### Development Tools
-- **TypeScript** for type safety
-- **Jest** for testing smart contracts
-- **BluePrint** for TON development workflow
-- **ngrok** for local development with Telegram WebApp
+#### 3. TipBot Contract (`contracts/tip_bot.tact`)
+- **Purpose**: Facilitates TON tipping between users
+- **Key Features**:
+  - Secure tip forwarding
+  - Transaction notifications
+  - Tip statistics tracking
 
-### Infrastructure
-- **Telegram Bot API** for Mini App hosting
-- **Telegram WebApp SDK** for platform integration
-- **Node.js polyfills** for browser compatibility
+### Wallet Integration
 
-## How we built it
+TonTip integrates with TON wallets through **TonConnect 2.0**:
 
-### Smart Contract Development
-1. **Reward Contract**: Built a TON smart contract using Tact language that handles:
-   - User deposits
-   - Reward distribution (0.01 TON per quiz)
-   - Owner withdrawal functionality
-   - Secure transaction validation
+#### Supported Wallets
+- **Tonkeeper**: Primary wallet with full feature support
+- **TON Wallet**: Chrome extension wallet
+- **Nicegram Wallet**: Integrated wallet within Nicegram app
 
-2. **HelloWorld Contract**: Created a simple counter contract for testing blockchain interactions
+#### Connection Flow
+1. User clicks "Connect Wallet" button
+2. TonConnect modal opens with available wallets
+3. User selects and authorizes their wallet
+4. Wallet connection is established and maintained
+5. User can now interact with smart contracts
 
-### Frontend Architecture
-1. **Component Structure**: Organized React components for:
-   - Quiz taking interface
-   - Wallet connection
-   - Reward claiming
-   - Progress tracking
+#### Security Features
+- **Manifest Validation**: Ensures secure wallet connections
+- **Transaction Signing**: All blockchain transactions require user approval
+- **Gas Estimation**: Automatic gas calculation for transactions
+- **Error Handling**: Comprehensive error handling for failed transactions
 
-2. **State Management**: Implemented local state management for:
-   - Quiz progress
-   - User wallet connection
-   - Transaction status
-   - UI state
+### Smart Contract Interactions
 
-3. **Routing**: Used TanStack Router for seamless navigation between:
-   - Home page with quiz selection
-   - Quiz taking interface
-   - Reward claiming page
-   - Contract interaction pages
+#### Quiz Reward Claiming
+```typescript
+// User completes quiz with perfect score
+// Frontend calls smart contract to claim reward
+const payload = encodeClaimRewardMessage();
+const tx = {
+  validUntil: Math.floor(Date.now() / 1000) + 600,
+  messages: [{
+    address: REWARD_CONTRACT_ADDRESS,
+    amount: toNano("0.05"), // Gas fee
+    payload: payload
+  }]
+};
+await tonConnectUI.sendTransaction(tx);
+```
 
-### Telegram Integration
-1. **WebApp Setup**: Configured Telegram Mini App with proper manifest and HTTPS
-2. **Wallet Integration**: Implemented TonConnect for seamless wallet connections
-3. **UI Adaptation**: Designed responsive interface optimized for mobile Telegram usage
+#### Contract Deployment
+```bash
+# Deploy HelloWorld contract
+npx blueprint run deployHelloWorld
 
-### Testing & Deployment
-1. **Smart Contract Testing**: Comprehensive Jest tests for all contract functionality
-2. **Frontend Testing**: Component testing and integration testing
-3. **Local Development**: ngrok setup for testing Telegram WebApp functionality
+# Deploy TipBot contract  
+npx blueprint run deployTipBot
+```
 
-## What we learned
+### TON Network Configuration
 
-- **TON Blockchain**: Deep understanding of TON's architecture and Tact smart contract development
-- **Telegram Mini Apps**: Complexities of developing within Telegram's WebApp environment
-- **Blockchain UX**: Importance of user-friendly interfaces for blockchain applications
-- **Smart Contract Security**: Best practices for secure reward distribution systems
-- **Cross-Platform Development**: Challenges of maintaining consistency across different platforms
-- **State Management**: Effective patterns for managing complex application state
-- **Modern Web Development**: Latest React patterns and TypeScript best practices
+- **Network**: TON Mainnet
+- **RPC Endpoint**: `https://toncenter.com/api/v2/jsonRPC`
+- **Gas Fees**: ~0.05 TON per transaction
+- **Block Time**: ~5 seconds
+- **Transaction Confirmation**: ~10-30 seconds
 
-## What's next for TonTip
+## MVP Usage Guide
 
-### Short-term Goals
-- **Enhanced Quiz Content**: Add more diverse quiz categories and difficulty levels
-- **Social Features**: Implement leaderboards and user achievements
-- **Improved UI**: Add animations and micro-interactions for better user experience
-- **Mobile Optimization**: Further optimize for various mobile devices
+### For Users
 
-### Medium-term Goals
-- **Advanced Smart Contracts**: Implement more sophisticated reward mechanisms
-- **Quiz Creation**: Allow users to create and share their own quizzes
-- **Analytics Dashboard**: Add detailed analytics for quiz performance
-- **Multi-language Support**: Expand to support multiple languages
+#### Getting Started
+1. **Access the App**: Open TonTip through Telegram Mini App
+2. **Connect Wallet**: Click "Connect Wallet" and select your TON wallet
+3. **Browse Quizzes**: View available quizzes on the home page
+4. **Take a Quiz**: Select a quiz and answer all questions correctly
+5. **Claim Reward**: If you get a perfect score, claim your TON reward
 
-### Long-term Vision
-- **DAO Governance**: Implement decentralized governance for quiz content
-- **NFT Integration**: Add NFT rewards for special achievements
-- **Cross-chain Support**: Extend to other blockchain networks
-- **Educational Partnerships**: Partner with educational institutions for content
+#### Available Quizzes
+- **Math Basics** (5 questions, 0.01 TON reward)
+- **World History** (5 questions, 0.015 TON reward)  
+- **Basic Physics** (5 questions, 0.02 TON reward)
+- **Cryptocurrency Basics** (5 questions, 0.025 TON reward)
 
-### Technical Improvements
-- **Performance Optimization**: Implement lazy loading and code splitting
-- **Security Enhancements**: Add additional security measures for smart contracts
-- **Scalability**: Design for handling thousands of concurrent users
-- **Monitoring**: Implement comprehensive error tracking and analytics
+#### Reward System
+- **Perfect Score Required**: Must answer all questions correctly
+- **One-Time Claim**: Each quiz can only be claimed once per wallet
+- **Automatic Distribution**: Rewards are sent directly to your connected wallet
+- **Gas Fees**: Small gas fee (~0.05 TON) required for claiming
 
----
+#### Troubleshooting
+- **Wallet Not Connecting**: Ensure you have a supported TON wallet installed
+- **Transaction Fails**: Check your wallet has sufficient TON for gas fees
+- **Reward Not Received**: Wait 10-30 seconds for blockchain confirmation
 
-## Getting Started
+### For Developers
 
-### Prerequisites
+#### Prerequisites
 - Node.js 18+
 - pnpm package manager
 - TON wallet (Tonkeeper, TON Wallet, etc.)
 - ngrok for local development
 
-### Installation
+#### Local Development Setup
+
 ```bash
 # Clone the repository
 git clone https://github.com/yourusername/TonTip.git
@@ -163,26 +165,216 @@ cd mini-app2
 pnpm dev
 ```
 
-### Testing
+#### Testing Smart Contracts
+
 ```bash
-# Test smart contracts
+# Run all tests
 npm test
 
 # Test specific contract
 npm test -- tests/RewardContract.spec.ts
+npm test -- tests/HelloWorld.spec.ts
+npm test -- tests/TipBot.spec.ts
 ```
 
-### Deployment
+#### Deploying Contracts
+
 ```bash
-# Deploy contracts
-npx blueprint run deployRewardContract
+# Deploy HelloWorld contract
+npx blueprint run deployHelloWorld
+
+# Deploy TipBot contract
 npx blueprint run deployTipBot
+
+# Test TipBot functionality
+npx blueprint run testTipBot
 ```
+
+#### Telegram Mini App Setup
+
+1. **Configure ngrok** for HTTPS access:
+```bash
+ngrok http 3000
+```
+
+2. **Update manifest URLs** in `mini-app2/src/config/tonconnect.ts`
+
+3. **Set up Telegram Bot** with Mini App configuration
+
+4. **Test in Telegram** using the bot's Mini App
+
+#### Environment Configuration
+
+```typescript
+// mini-app2/src/config/tonconnect.ts
+export const getManifestUrl = () => {
+  const currentHost = window.location.origin;
+  
+  if (currentHost.includes('ngrok')) {
+    return `${currentHost}/tonconnect-manifest.json`;
+  }
+  
+  return 'https://your-ngrok-url.ngrok-free.app/tonconnect-manifest.json';
+};
+```
+
+### For Contract Owners
+
+#### Managing the Reward Contract
+
+1. **Deposit Funds**: Send TON to the contract address to fund rewards
+2. **Monitor Balance**: Check contract balance on TONScan
+3. **Withdraw Funds**: Use owner-only withdrawal function if needed
+
+#### Contract Addresses
+- **Reward Contract**: `EQBvW8Z5huBkMJYdnfAEM5JqTNkuWX3diqYENkWsIL0XggGG`
+- **HelloWorld Contract**: `EQDmj9bqTleRjqQ2PpuLEwhFzNJPL2_4SxPQF2l3AkAwGEtn`
+
+#### Contract Management Commands
+```bash
+# Check contract balance
+npx blueprint run checkBalance --address EQBvW8Z5huBkMJYdnfAEM5JqTNkuWX3diqYENkWsIL0XggGG
+
+# Withdraw funds (owner only)
+npx blueprint run withdrawAll --address EQBvW8Z5huBkMJYdnfAEM5JqTNkuWX3diqYENkWsIL0XggGG
+```
+
+## Technologies Used
+
+### Frontend
+- **React 19** with TypeScript for type-safe development
+- **TanStack Router** for modern client-side routing
+- **Tailwind CSS** for responsive design and glass morphism effects
+- **Vite** for fast development and building
+- **TanStack Start** for full-stack React framework
+
+### Blockchain
+- **TON Blockchain** for decentralized infrastructure
+- **Tact Language** for smart contract development
+- **@ton/core** and **@ton/ton** for blockchain interactions
+- **TonConnect 2.0** for wallet integration
+- **@tonconnect/ui-react** for React wallet components
+
+### Development Tools
+- **TypeScript** for type safety
+- **Jest** for testing smart contracts
+- **BluePrint** for TON development workflow
+- **ngrok** for local development with Telegram WebApp
+
+### Infrastructure
+- **Telegram Bot API** for Mini App hosting
+- **Telegram WebApp SDK** for platform integration
+- **Node.js polyfills** for browser compatibility
+
+## Architecture Overview
+
+### Smart Contract Architecture
+```
+RewardContract
+├── User Deposits (TON contributions)
+├── Reward Distribution (0.01 TON per perfect quiz)
+├── Owner Withdrawal (emergency fund recovery)
+└── Event Emission (transaction tracking)
+
+HelloWorld Contract
+├── Counter Management
+├── Increment Function
+└── State Reading
+
+TipBot Contract
+├── Tip Forwarding
+├── Notification System
+└── Statistics Tracking
+```
+
+### Frontend Architecture
+```
+TonTip Mini App
+├── Wallet Connection (TonConnect)
+├── Quiz System (React components)
+├── Reward Claiming (Smart contract interaction)
+├── Progress Tracking (Local storage)
+└── UI/UX (Tailwind CSS + Glass morphism)
+```
+
+### Data Flow
+1. **User Action**: User completes quiz with perfect score
+2. **Frontend Validation**: Check quiz completion and eligibility
+3. **Smart Contract Call**: Encode and send claim transaction
+4. **Wallet Approval**: User approves transaction in wallet
+5. **Blockchain Processing**: Transaction processed on TON network
+6. **Reward Distribution**: TON sent to user's wallet
+7. **UI Update**: Update progress and show confirmation
+
+## Security Considerations
+
+### Smart Contract Security
+- **Access Control**: Owner-only functions for critical operations
+- **Input Validation**: All user inputs are validated
+- **Gas Optimization**: Efficient gas usage for cost-effective transactions
+- **Error Handling**: Comprehensive error handling and user feedback
+
+### Frontend Security
+- **Wallet Validation**: Secure wallet connection through TonConnect
+- **Transaction Signing**: All transactions require user approval
+- **Data Validation**: Client-side validation for user inputs
+- **HTTPS Only**: Secure communication for all API calls
+
+### User Privacy
+- **No Personal Data**: No personal information is stored on-chain
+- **Wallet Privacy**: Only wallet addresses are used for transactions
+- **Local Storage**: Quiz progress stored locally on user's device
+- **Telegram Integration**: Leverages Telegram's existing privacy features
+
+## Challenges and Solutions
+
+### Telegram WebApp Limitations
+- **Challenge**: Restricted WebView environment
+- **Solution**: TonConnect deep linking and universal links
+
+### TON Blockchain Integration
+- **Challenge**: Complex smart contract interactions
+- **Solution**: Comprehensive error handling and user-friendly UI
+
+### Cross-Platform Compatibility
+- **Challenge**: Different devices and Telegram versions
+- **Solution**: Responsive design and progressive enhancement
+
+### State Management
+- **Challenge**: Complex quiz state and blockchain transactions
+- **Solution**: Local storage for progress, real-time blockchain updates
+
+## Future Roadmap
+
+### Short-term Goals (1-3 months)
+- **Enhanced Quiz Content**: Add more diverse quiz categories
+- **Social Features**: Leaderboards and user achievements
+- **Improved UI**: Animations and micro-interactions
+- **Mobile Optimization**: Better mobile experience
+
+### Medium-term Goals (3-6 months)
+- **Advanced Smart Contracts**: More sophisticated reward mechanisms
+- **Quiz Creation**: User-generated quiz content
+- **Analytics Dashboard**: Detailed performance analytics
+- **Multi-language Support**: Internationalization
+
+### Long-term Vision (6+ months)
+- **DAO Governance**: Decentralized content management
+- **NFT Integration**: NFT rewards for special achievements
+- **Cross-chain Support**: Multi-blockchain compatibility
+- **Educational Partnerships**: Institutional content partnerships
 
 ## Contributing
 
 We welcome contributions! Please read our contributing guidelines and submit pull requests for any improvements.
 
-## License
+### Development Guidelines
+- Follow TypeScript best practices
+- Write comprehensive tests for smart contracts
+- Maintain consistent code formatting
+- Update documentation for new features
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+### Testing Requirements
+- All smart contracts must have Jest tests
+- Frontend components should have integration tests
+- End-to-end testing for critical user flows
